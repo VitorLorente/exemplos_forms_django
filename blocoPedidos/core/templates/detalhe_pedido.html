@@ -1,0 +1,7 @@
+<h1>{{object.numero}}</h1>
+
+
+{% for item in object.pedidoproduto_set.all %}
+    <p>{{item.quantidade}} - {{item.produto.nome}} - {{item.produto.preco}} - {{item.valor_final}}</p>
+{% endfor %}
+<p><b>Total: {{object.total}}</b></p>
