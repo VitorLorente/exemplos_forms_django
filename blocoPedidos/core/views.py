@@ -36,11 +36,3 @@ class PedidoUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("pedido",  kwargs={'pk': 1})
-
-    # def get_context_data(self, **kwargs):
-    #     data = super().get_context_data(**kwargs)
-    #     if self.request.POST:
-    #         data['forms'] = PedidoFormSet(self.request.POST)
-    #     else:
-    #         data['forms'] = PedidoFormSet()
-    #     return data
