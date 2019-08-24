@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import PedidoDetailView, PedidoUpdateView
+from core.views import PedidoDetailView, PedidoUpdateView, delete_item_pedido
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pedido/<int:pk>/', PedidoDetailView.as_view(), name='pedido'),
-    path('novo-pedido/<int:pk>', PedidoUpdateView.as_view(), name='novo-pedido')
+    path('novo-pedido/<int:pk>', PedidoUpdateView.as_view(), name='novo-pedido'),
+    path('pedido/remover-item', delete_item_pedido, name='remover-pedidos'),
 ]

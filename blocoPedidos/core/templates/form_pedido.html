@@ -112,7 +112,7 @@
                     </div>
                     <div class="input-group-prepend col-1 p-0 mb-0">
                         {% if item.id.value %}
-                            <button class="btn-cancelar-item form-control" type="button"><i class="fas fa-times-circle"></i> Excluir</button>
+                            <button class="btn-cancelar-item form-control excluir-item" type="button" value="{{ item.id.value }}"><i class="fas fa-times-circle"></i> Excluir</button>
                         {% else %}
                             <button class="btn-add-item form-control" type="submit"><i class="fas fa-plus-circle"></i> Add</button>
                         {% endif %}
@@ -132,6 +132,7 @@
         </form>
 
         <script src="{% static 'js/calculos.js' %}"></script>
+        <script src="{% static 'js/post.js' %}"></script>
 </body>
 </html>
 

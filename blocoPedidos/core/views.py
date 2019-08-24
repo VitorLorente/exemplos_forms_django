@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 
+from django.http import HttpResponseRedirect
+
 from core.models import Pedido, PedidoProduto, Produto
 from core.forms import PedidoForm, PedidoFormSet
 
@@ -40,3 +42,9 @@ class PedidoUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse("novo-pedido",  kwargs={'pk': 1})
+
+def delete_item_pedido(request):
+    # import pdb; pdb.set_trace()
+    pk = request.POST["pk"]
+    PedidoProduto.objects.filter(pk=pk).delete()
+    return HttpResponseRedirect(reverse("novo-pedido", kwargs={'pk': 1}))
