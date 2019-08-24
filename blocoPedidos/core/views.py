@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
 
-from core.models import Pedido, PedidoProduto
+from core.models import Pedido, PedidoProduto, Produto
 from core.forms import PedidoForm, PedidoFormSet
 
 class PedidoDetailView(DetailView):
@@ -23,6 +23,7 @@ class PedidoUpdateView(UpdateView):
     template_name = "form_pedido.html"
 
     def get(self, request, *args, **kwargs):
+
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -30,9 +31,12 @@ class PedidoUpdateView(UpdateView):
         items = PedidoProduto.objects.filter(pedido=self.object).order_by('pk').values()
 
         items_form = PedidoFormSet(initial=items)
+
+        produtos = Produto.objects.all()
         return self.render_to_response(
             self.get_context_data(form=form,
-                                items_form=items_form))
+                                items_form=items_form,
+                                produtos=produtos))
 
     def get_success_url(self):
-        return reverse("pedido",  kwargs={'pk': 1})
+        return reverse("novo-pedido",  kwargs={'pk': 1})

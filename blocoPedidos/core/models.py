@@ -5,7 +5,7 @@ class Produto(models.Model):
     preco = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.nome} - R$ {self.preco}"
+        return f"{self.nome}"
 
 class Pedido(models.Model):
     data = models.DateTimeField(auto_now=True)
