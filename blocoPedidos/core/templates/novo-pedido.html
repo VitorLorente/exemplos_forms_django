@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container col-8 d-flex justify-content-start p-2 mb-2">
+    <h1>Pedido nº #{{pk}}</h1>
+</div>
+
+<div class="container col-8 d-flex justify-content-start p-2">
+    <form method="POST" action="/novo-pedido/" class="form-inline">
+        {% csrf_token %}
+        <div class="input-group-prepend col-1 p-0 mb-0">
+            <div class="input-group-prepend">
+                <div class="input-group-text"> Nome do cliente: </div>
+            </div>
+            <input id="id_{{ form.cliente_nome.name }}" type="text" class="form-control" name="{{ form.cliente_nome.name }}">
+            <div class="input-group-prepend ml-2">
+                <div class="input-group-text"> R.G do cliente: </div>
+            </div>
+            <input id="id_{{ form.cliente_rg.name }}" type="text" class="form-control" name="{{ form.cliente_rg.name }}">
+            <button type="submit" class="btn btn-success ml-2">Continuar</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="{% static 'js/mask/masks.js' %}"></script>
+{% endblock %}

@@ -8,9 +8,18 @@ class Produto(models.Model):
     def __str__(self):
         return f"{self.nome}"
 
+class Cliente(models.Model):
+    nome = models.CharField("Nome", max_length=50)
+    rg = models.CharField("R.G", max_length=12)
+
+    def __str__(self):
+        return f"Nome: {self.nome} - R.G.: {self.rg}"
+
 class Pedido(models.Model):
     data = models.DateTimeField(auto_now=True)
     desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    cliente = models.ForeignKey(Cliente, on_delete=models.PROTECT)
+    finalizado = models.BooleanField(default=False)
 
     @property
     def total(self):

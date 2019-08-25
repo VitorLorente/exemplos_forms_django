@@ -3,11 +3,45 @@ from decimal import Decimal
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView
+from django.views.generic.edit import UpdateView, FormView
+from django.views.generic.base import TemplateView
 from django.http import HttpResponseRedirect
 
 from core.models import Pedido, PedidoProduto, Produto
-from core.forms import PedidoForm, PedidoFormSet
+from core.forms import PedidoForm, PedidoFormSet,NovoPedidoForm
+
+class HomeView(TemplateView):
+    template_name = 'home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pedidos_abertos'] = Pedido.objects.filter(finalizado=False)
+        context['pedidos_finalizados'] = Pedido.objects.filter(finalizado=True)
+        return context
+
+
+class NovoPedidoFormView(FormView):
+    template_name = 'novo-pedido.html'
+    form_class = NovoPedidoForm
+    pk = None
+    ultimo_pedido = Pedido.objects.all().order_by("pk").last()
+
+    def form_valid(self, form):
+        if form.is_valid():
+            novo_pedido = form.save()
+            self.pk = novo_pedido.pk
+            return super(NovoPedidoFormView, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        if self.ultimo_pedido:
+            kwargs['pk'] = self.ultimo_pedido.pk + 1
+        else:
+            kwargs['pk'] = 1
+        return super().get_context_data(**kwargs)
+
+    def get_success_url(self):
+        return reverse('novo-pedido', kwargs={'pk': self.pk})
+
 
 class PedidoDetailView(DetailView):
 
@@ -39,7 +73,8 @@ class PedidoUpdateView(UpdateView):
                                 produtos=produtos))
 
     def get_success_url(self):
-        return reverse("novo-pedido",  kwargs={'pk': 1})
+        import pdb; pdb.set_trace()
+        return reverse("novo-pedido",  kwargs={'pk': self.get_object().pk})
 
 
 def delete_item_pedido(request):
