@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import *
 
 class Produto(models.Model):
     nome = models.CharField("Nome", max_length=30)
@@ -9,12 +10,19 @@ class Produto(models.Model):
 
 class Pedido(models.Model):
     data = models.DateTimeField(auto_now=True)
+    desconto = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
 
     @property
     def total(self):
-        return sum(
+        getcontext().prec = 4
+        total = sum(
             [item.valor_final for item in self.pedidoproduto_set.all()]
         )
+        descontado = Decimal(0.0)
+        if self.desconto > 0:
+            descontado = Decimal((self.desconto / 100) * total)
+
+        return Decimal(total - descontado)
 
     @property
     def numero(self):

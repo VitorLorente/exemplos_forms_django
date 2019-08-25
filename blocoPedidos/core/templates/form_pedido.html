@@ -14,125 +14,98 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <script src="{% static 'js/mask/jquery.mask.js' %}"></script>
 
     <title>Document</title>
 </head>
 <body>
-    <!-- {% for item in form %}
-        {{item}}<br>
-    {% endfor %} -->
-    <!-- <div class="container form-container col-10">
-        <div class="input-group col-12">
-            <div class="input-group-prepend col-1 p-0">
-                <span class="input-group-text col-12" id="">Qtde.</span>
-            </div>
-            <div class="input-group-prepend col-6 p-0">
-                <span class="input-group-text col-12" id="">Produto</span>
-            </div>
-            <div class="input-group-prepend col-2 p-0">
-                <span class="input-group-text col-12" id="">Preço unitário</span>
-            </div>
-            <div class="input-group-prepend col-2 p-0">
-                <span class="input-group-text col-12" id="">Preço total</span>
-            </div>
-            <div class="input-group-prepend col-1 p-0">
-                <span class="input-group-text col-12" id="">Cancelar</span>
-            </div>
-        </div>
-        {{ form.management_form }}
-        {% for item in form %}
-        <div class="input-group col-12">
-            <div class="input-group-prepend col-1 p-0 mb-0">
-                {{item.id}}
-                <input id="id_{{ item.quantidade.html_name }}" type="text" class="form-control" name="{{ item.quantidade.html_name }}" {% if item.quantidade.value %} value="{{ item.quantidade.value }}" {% endif %}>
-            </div>
-            <div class="input-group-prepend col-6 p-0 mb-0">
-                <select type="text" class="custom-select" name="{{ item.produto.html_name }}" id="id_{{ item.quantidade.html_name }}">
-                </select>
-            </div>
-            <div class="input-group-prepend col-2 p-0 mb-0">
-                <input id="item-valor-final" type="text" class="form-control" {% if item.instance %} value="{{item.instance.produto.preco}}" {% endif %} readonly>
-            </div>
-            <div class="input-group-prepend col-2 p-0 mb-0">
-                <input id="item-valor-final" type="text" class="form-control" {% if item.instance %} value="{{item.instance.valor_final}}" {% endif %} readonly>
-            </div>
-            <div class="input-group-prepend col-1 p-0">
-                <span class="input-group-text col-12" id="">Cancelar</span>
-            </div>
-        </div>
-        {% endfor %}
-    </div> -->
-
-    <div class="container pedido-titulo-container col-10 py-3">
+    <div class="container pedido-titulo-container col-8 d-flex justify-content-start">
         <h1>Pedido nº {{ pedido.numero }}</h1>
     </div>
         <br>
 
-        <form method="POST" action="/novo-pedido/1">
-            {% csrf_token %}
-            {{ form.management_form }}
-            <div class="container form-container col-10">
-                <div class="input-group col-12">
-                    <div class="input-group-prepend col-1 p-0">
-                        <span class="input-group-text col-12" id="">Qtde.</span>
+    <div class="container col-8 mb-3 d-flex justify-content-end">
+        <div class="form-group d-flex justify-content-end">
+            <form class="form-inline d-flex justify-content-end" method="POST" action="/pedido/lancar-desconto/">
+                <div class="input-group mb-2 mr-sm-2">
+                    <label for="id_desconto" class="mr-4">Lançar deconto:</label>
+                    <input type="text" value="{{ pedido.pk }}" name="id-pedido" hidden>
+                    <input id="id_desconto" name="desconto" type="text" class="form-control col-3" placeholder="0,00" value="{{ pedido.desconto }}">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">%</div>
                     </div>
-                    <div class="input-group-prepend col-6 p-0">
-                        <span class="input-group-text col-12" id="">Produto</span>
-                    </div>
-                    <div class="input-group-prepend col-2 p-0">
-                        <span class="input-group-text col-12" id="">Preço unitário</span>
-                    </div>
-                    <div class="input-group-prepend col-2 p-0">
-                        <span class="input-group-text col-12" id="">Preço total</span>
-                    </div>
-                    <div class="input-group-prepend col-1 p-0">
-                        <span class="input-group-text col-12" id="">Ação</span>
-                    </div>
+                    <button id="lancar-desconto" class="btn btn-primary ml-2" type="button">Lançar</button>
                 </div>
-                {{ form.management_form }}
-                {% for item in form %}
-                <div class="input-group col-12">
-                    <div class="input-group-prepend col-1 p-0 mb-0">
-                        {{item.id}}
-                        <input id="id_{{ item.quantidade.html_name }}" type="text" class="form-control input-quantidade" name="{{ item.quantidade.html_name }}" {% if item.quantidade.value %} value="{{ item.quantidade.value }}" {% endif %}>
-                    </div>
-                    <div class="input-group-prepend col-6 p-0 mb-0">
-                        <select type="text" class="custom-select" name="{{ item.produto.html_name }}" id="id_{{ item.produto.html_name }}">
-                            <option value="">- - - - -</option>
-                            {% for produto in produtos %}
-                            <option value="{{ produto.pk }}" {% if item.id.value and produto.pk == item.produto.value %}selected{% endif %} preco="{{produto.preco}}">{{ produto.nome }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="input-group-prepend col-2 p-0 mb-0">
-                        <input type="text" class="form-control item-preco" {% if item.instance %} value="{{item.instance.produto.preco}}" {% endif %} readonly>
-                    </div>
-                    <div class="input-group-prepend col-2 p-0 mb-0">
-                        <input type="text" class="form-control item-valor-final" {% if item.instance %} value="{{item.instance.valor_final}}" {% endif %} readonly>
-                    </div>
-                    <div class="input-group-prepend col-1 p-0 mb-0">
-                        {% if item.id.value %}
-                            <button class="btn-cancelar-item form-control excluir-item" type="button" value="{{ item.id.value }}"><i class="fas fa-times-circle"></i> Excluir</button>
-                        {% else %}
-                            <button class="btn-add-item form-control" type="submit"><i class="fas fa-plus-circle"></i> Add</button>
-                        {% endif %}
-                    </div>
+            </form>
+        </div>
+    </div>
+
+    <form method="POST" action="/novo-pedido/1/">
+        {% csrf_token %}
+        {{ form.management_form }}
+        <div class="container form-container col-8">
+            <div class="input-group col-12">
+                <div class="input-group-prepend col-1 p-0">
+                    <span class="input-group-text col-12" id="">Qtde.</span>
                 </div>
-                {% endfor %}
-                <div class="input-group col-12 total-container">
-                    <div class="input-group-prepend total-space col-9 p-0 mb-0">
-                        <input id="item-valor-final" type="text" class="form-control" readonly>
-                    </div>
-                    
-                    <div class="input-group-prepend col-2 p-0 mb-0">
-                        <span id="total-pedido" class="input-group-text col-12 p-0 mb-0">{{pedido.total}}</span>
-                    </div>
+                <div class="input-group-prepend col-6 p-0">
+                    <span class="input-group-text col-12" id="">Produto</span>
+                </div>
+                <div class="input-group-prepend col-2 p-0">
+                    <span class="input-group-text col-12" id="">Preço unitário</span>
+                </div>
+                <div class="input-group-prepend col-2 p-0">
+                    <span class="input-group-text col-12" id="">Preço total</span>
+                </div>
+                <div class="input-group-prepend col-1 p-0">
+                    <span class="input-group-text col-12" id="">Ação</span>
                 </div>
             </div>
-        </form>
+            {{ form.management_form }}
+            {% for item in form %}
+            <div class="input-group col-12">
+                <div class="input-group-prepend col-1 p-0 mb-0">
+                    {{item.id}}
+                    <input id="id_{{ item.quantidade.html_name }}" type="text" class="form-control input-quantidade" name="{{ item.quantidade.html_name }}" {% if item.quantidade.value %} value="{{ item.quantidade.value }}" {% endif %}>
+                </div>
+                <div class="input-group-prepend col-6 p-0 mb-0">
+                    <select type="text" class="custom-select" name="{{ item.produto.html_name }}" id="id_{{ item.produto.html_name }}">
+                        <option value="">- - - - -</option>
+                        {% for produto in produtos %}
+                        <option value="{{ produto.pk }}" {% if item.id.value and produto.pk == item.produto.value %}selected{% endif %} preco="{{produto.preco}}">{{ produto.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="input-group-prepend col-2 p-0 mb-0">
+                    <input type="text" class="form-control item-preco" {% if item.instance %} value="{{item.instance.produto.preco}}" {% endif %} readonly>
+                </div>
+                <div class="input-group-prepend col-2 p-0 mb-0">
+                    <input type="text" class="form-control item-valor-final" {% if item.instance %} value="{{item.instance.valor_final}}" {% endif %} readonly>
+                </div>
+                <div class="input-group-prepend col-1 p-0 mb-0">
+                    {% if item.id.value %}
+                        <button class="btn-cancelar-item form-control excluir-item" type="button" value="{{ item.id.value }}"><i class="fas fa-times-circle"></i></button>
+                    {% else %}
+                        <button class="btn-add-item form-control" type="submit"><i class="fas fa-plus-circle"></i></button>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="input-group col-12 total-container">
+                <div class="input-group-prepend total-space col-9 p-0 mb-0">
+                    <input id="item-valor-final" type="text" class="form-control" readonly>
+                </div>
+                
+                <div class="input-group-prepend col-2 p-0 mb-0">
+                    <span class="input-group-text col-12 p-0 mb-0"><b>Total: R$ <span id="total-pedido">{{pedido.total}}</span></b></span>
+                </div>
+            </div>
+        </div>
+    </form>
 
-        <script src="{% static 'js/calculos.js' %}"></script>
-        <script src="{% static 'js/post.js' %}"></script>
+    <script src="{% static 'js/calculos.js' %}"></script>
+    <script src="{% static 'js/post.js' %}"></script>
+    <script src="{% static 'js/mask/masks.js' %}"></script>
 </body>
 </html>
 

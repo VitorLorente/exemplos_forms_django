@@ -1,11 +1,9 @@
+from decimal import Decimal
+
 from django.shortcuts import render
 from django.urls import reverse
-
-# Create your views here.
-
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView
-
 from django.http import HttpResponseRedirect
 
 from core.models import Pedido, PedidoProduto, Produto
@@ -43,8 +41,18 @@ class PedidoUpdateView(UpdateView):
     def get_success_url(self):
         return reverse("novo-pedido",  kwargs={'pk': 1})
 
+
 def delete_item_pedido(request):
-    # import pdb; pdb.set_trace()
-    pk = request.POST["pk"]
-    PedidoProduto.objects.filter(pk=pk).delete()
-    return HttpResponseRedirect(reverse("novo-pedido", kwargs={'pk': 1}))
+    if request.POST:
+        pk = request.POST["pk"]
+        PedidoProduto.objects.filter(pk=pk).delete()
+        return HttpResponseRedirect(reverse("novo-pedido", kwargs={'pk': 1}))
+
+
+def lancar_desconto(request):
+    if request.POST:
+        pk = request.POST["pk"]
+        desconto = Decimal(request.POST["desconto"].replace(",", ".").replace("%", ""))
+        Pedido.objects.filter(pk=pk).update(desconto=desconto)
+
+        return HttpResponseRedirect(reverse("novo-pedido", kwargs={'pk': pk}))

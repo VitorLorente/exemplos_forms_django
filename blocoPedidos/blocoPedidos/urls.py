@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core.views import PedidoDetailView, PedidoUpdateView, delete_item_pedido
+from core.views import PedidoDetailView, PedidoUpdateView, delete_item_pedido, lancar_desconto
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('pedido/<int:pk>/', PedidoDetailView.as_view(), name='pedido'),
-    path('novo-pedido/<int:pk>', PedidoUpdateView.as_view(), name='novo-pedido'),
-    path('pedido/remover-item', delete_item_pedido, name='remover-pedidos'),
+    path('novo-pedido/<int:pk>/', PedidoUpdateView.as_view(), name='novo-pedido'),
+    path('pedido/remover-item/', delete_item_pedido, name='remover-pedidos'),
+    path('pedido/lancar-desconto/', lancar_desconto, name='lancar-desconto')
 ]
