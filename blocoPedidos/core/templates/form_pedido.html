@@ -7,8 +7,8 @@
         <br>
 
     <div class="container col-8 mb-3 d-flex justify-content-end">
-        <div class="form-group d-flex justify-content-end">
-            <form class="form-inline d-flex justify-content-end" method="POST" action="/pedido/lancar-desconto/">
+        <div class="form-group">
+            <form class="form-inline" method="POST" action="/pedido/lancar-desconto/">
                 <div class="input-group mb-2 mr-sm-2">
                     <label for="id_desconto" class="mr-4">Lançar deconto:</label>
                     <input type="text" value="{{ pedido.pk }}" name="id-pedido" hidden>
@@ -79,11 +79,21 @@
                 </div>
                 
                 <div class="input-group-prepend col-2 p-0 mb-0">
-                    <span class="input-group-text col-12 p-0 mb-0"><b>Total: R$ <span id="total-pedido">{{pedido.total}}</span></b></span>
+                    <span class="input-group-text col-12 p-0 mb-0"><b>Total: R$ <span id="total-pedido">{{pedido.total|floatformat:2}}</span></b></span>
                 </div>
             </div>
         </div>
     </form>
+
+    <div class="container col-6 mt-5 d-flex justify-content-end">
+        <form method="POST" class="form-inline" action="{% url 'finalizar-pedido' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="pk" value="{{ pedido.pk }}" hidden>
+                <button id="finalizar-pedido" class="btn btn-primary" type="submit">Finalizar</button>
+            </div>
+        </form>
+    </div>
 
     <script src="{% static 'js/calculos.js' %}"></script>
     <script src="{% static 'js/post.js' %}"></script>

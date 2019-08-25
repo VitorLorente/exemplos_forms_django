@@ -23,7 +23,6 @@ class Pedido(models.Model):
 
     @property
     def total(self):
-        getcontext().prec = 4
         total = sum(
             [item.valor_final for item in self.pedidoproduto_set.all()]
         )
@@ -31,11 +30,15 @@ class Pedido(models.Model):
         if self.desconto > 0:
             descontado = Decimal((self.desconto / 100) * total)
 
-        return Decimal(total - descontado)
+        return total - descontado
 
     @property
     def numero(self):
         return f"#{self.pk}"
+
+    def __str__(self):
+        total = ("%.2f" % self.total)
+        return f"Pedido nº {self.numero} aberto em {self.data.strftime('%d/%m/%Y')} no valor de R$ {total}"
 
 
 class PedidoProduto(models.Model):

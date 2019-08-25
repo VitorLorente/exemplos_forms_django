@@ -17,15 +17,16 @@ from django.contrib import admin
 from django.urls import path
 from core.views import (
     PedidoDetailView, PedidoUpdateView, delete_item_pedido,
-    lancar_desconto, HomeView, NovoPedidoFormView
+    lancar_desconto, HomeView, NovoPedidoFormView, finalizar_pedido
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', HomeView.as_view(), name='home'),
-    path('pedido/<int:pk>/', PedidoDetailView.as_view(), name='pedido'),
     path('novo-pedido/', NovoPedidoFormView.as_view(), name='inicio-novo-pedido'),
     path('novo-pedido/<int:pk>/', PedidoUpdateView.as_view(), name='novo-pedido'),
     path('pedido/remover-item/', delete_item_pedido, name='remover-pedidos'),
-    path('pedido/lancar-desconto/', lancar_desconto, name='lancar-desconto')
+    path('pedido/lancar-desconto/', lancar_desconto, name='lancar-desconto'),
+    path('pedido/finalizar/', finalizar_pedido, name='finalizar-pedido'),
+    path('pedido/<int:pk>/', PedidoDetailView.as_view(), name='pedido'),
 ]

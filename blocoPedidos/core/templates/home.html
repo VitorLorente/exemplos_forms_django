@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<a class="btn btn-success" href="/novo-pedido/">Novo pedido</a>
-<div class="container d-flex justify-content-between col-10">
-    <div class="col-6">
-        {% for pedido in pedidos_abertos %}
-            {{pedido}}
-        {% endfor %}
+
+<div class="container d-flex justify-content-end col-10 mt-3">
+    <a class="btn btn-success" href="/novo-pedido/">Novo pedido</a>
+</div>
+<div class="container d-flex justify-content-between col-10 mt-3">
+    <div class="col-6 d-flex container">
+        <div style="margin: 0 auto;">
+            <h2>Pedidos em aberto</h2>
+            {% for pedido in pedidos_abertos %}
+            <a href="{% url 'novo-pedido' pedido.pk %}">{{pedido}}</a><br>
+            {% endfor %}
+        </div>
     </div>
-    <div class="col-6">
-        {% for pedido in pedidos_finalizados %}
-            {{pedido}}
-        {% endfor %}
+    <div class="col-6 d-flex container">
+        <div style="margin: 0 auto;">
+            <h2>Pedidos finalizados</h2>
+            {% for pedido in pedidos_finalizados %}
+                <a href="{% url 'pedido' pedido.pk %}">{{pedido}}</a><br>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

@@ -44,7 +44,6 @@ class NovoPedidoFormView(FormView):
 
 
 class PedidoDetailView(DetailView):
-
     model = Pedido
 
     def get_template_names(self):
@@ -91,3 +90,12 @@ def lancar_desconto(request):
         Pedido.objects.filter(pk=pk).update(desconto=desconto)
 
         return HttpResponseRedirect(reverse("novo-pedido", kwargs={'pk': pk}))
+
+
+def finalizar_pedido(request):
+    if request.POST:
+        import pdb; pdb.set_trace()
+        pk = request.POST["pk"]
+        Pedido.objects.filter(pk=pk).update(finalizado=True)
+
+        return HttpResponseRedirect(reverse("pedido", kwargs={'pk': pk}))
