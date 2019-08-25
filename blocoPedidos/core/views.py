@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import UpdateView, FormView
 from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 
 from core.models import Pedido, PedidoProduto, Produto
@@ -15,6 +16,7 @@ class HomeView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['active_page'] = 'home'
         context['pedidos_abertos'] = Pedido.objects.filter(finalizado=False)
         context['pedidos_finalizados'] = Pedido.objects.filter(finalizado=True)
         return context
@@ -37,6 +39,7 @@ class NovoPedidoFormView(FormView):
             kwargs['pk'] = self.ultimo_pedido.pk + 1
         else:
             kwargs['pk'] = 1
+        kwargs['active_page'] = 'novo-pedido'
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):
@@ -48,6 +51,10 @@ class PedidoDetailView(DetailView):
 
     def get_template_names(self):
         return ["detalhe_pedido.html"]
+
+    def get_context_data(self, **kwargs):
+        kwargs['active_page'] = 'pedido'
+        return super().get_context_data(**kwargs)
 
 
 class PedidoUpdateView(UpdateView):
@@ -69,11 +76,24 @@ class PedidoUpdateView(UpdateView):
         return self.render_to_response(
             self.get_context_data(form=form,
                                 items_form=items_form,
-                                produtos=produtos))
+                                produtos=produtos,
+                                active_page='itens-pedidos'))
 
     def get_success_url(self):
         import pdb; pdb.set_trace()
         return reverse("novo-pedido",  kwargs={'pk': self.get_object().pk})
+
+
+class ProdutosListView(ListView):
+    model = Produto
+    paginate_by = 3
+    context_object_name = 'lista_produtos'
+    template_name = 'listagem-produtos.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs['active_page'] = 'listagem-produtos'
+        return super().get_context_data(**kwargs)
+
 
 
 def delete_item_pedido(request):

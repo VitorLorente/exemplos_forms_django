@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container col-7 mt-3 mb-5 d-flex justify-content-end px-5">
+    <a class="btn btn-success btn-novo-produto" href="">Novo produto</a>
+</div>
+
+<div class="container col-5 mt-3">
+    <div class="input-group col-12">
+        <div class="input-group-prepend col-6 p-0">
+            <span class="input-group-text col-12" id=""><b>Nome</b></span>
+        </div>
+        <div class="input-group-prepend col-3 p-0">
+            <span class="input-group-text col-12" id=""><b>Preço</b></span>
+        </div>
+        <div class="input-group-prepend col-3 p-0">
+            <span class="input-group-text col-12" id=""><b>Ações</b></span>
+        </div>
+    </div>
+    {% if lista_produtos %}
+        {% for produto in lista_produtos %}
+        <div class="input-group col-12">
+            <div class="input-group-prepend col-6 p-0">
+                <span class="input-group-text col-12 produto-container" id="">{{produto.nome}}</span>
+            </div>
+            <div class="input-group-prepend col-3 p-0">
+                <span class="input-group-text col-12 produto-container" id="">{{produto.preco}}</span>
+            </div>
+            <div class="input-group-prepend col-3 p-0">
+                <span class="input-group-text col-12 produto-container" id="">
+                    <span class="mr-3 edit-produto" title="editar"><i class="fas fa-edit"></i></span>
+                    <span class="ml-3 delete-produto" title="delete"><i class="fas fa-times-circle"></i> </span>           
+                </span>
+                
+            </div>
+        </div>
+        {% endfor %}
+        <div class="input-group col-12">
+            <div class="input-group-prepend col-6 p-0">
+                <span class="input-group-text col-12" id=""> </span>
+            </div>
+            <div class="input-group-prepend col-6 p-0">
+                <span class="input-group-text col-12" id=""> 
+                        {% if is_paginated %}
+                        <div class="pagination">
+                            <span class="page-links">
+                                {% if page_obj.has_previous %}
+                                    <a href="/produtos?page={{ page_obj.previous_page_number }}">previous</a>
+                                {% endif %}
+                                <span class="page-current">
+                                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                                </span>
+                                {% if page_obj.has_next %}
+                                    <a href="/produtos?page={{ page_obj.next_page_number }}">next</a>
+                                {% endif %}
+                            </span>
+                        </div>
+                        {% endif %}
+                    
+                </span>
+            </div>
+        </div>
+    {% else %}
+        <h3>My produtos</h3>
+        <p>No produtos found!!! :(</p>
+    {% endif %}
+    
+    {% endblock %}

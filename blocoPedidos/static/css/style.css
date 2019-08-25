@@ -1,3 +1,7 @@
+body, html {
+    background-color: whitesmoke;
+}
+
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -43,3 +47,29 @@ button:focus,
     background-color: #E9ECEF;
 }
 
+.container-pedidos-abertos {
+    border-right: 1px solid gray;
+    min-height: 300px;
+}
+
+.container-pedidos-finalizados {
+    border-left: 1px solid gray;
+    min-height: 300px;
+}
+
+.produto-container{
+    background-color: rgb(255, 255, 255) !important;
+}
+
+.produto-container span{
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.delete-produto {
+    color: red;
+}
+
+.edit-produto {
+    color: rgb(55, 158, 243);
+}

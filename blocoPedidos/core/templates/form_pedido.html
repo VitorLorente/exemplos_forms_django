@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <div class="container pedido-titulo-container col-8 d-flex justify-content-start">
+    <div class="container pedido-titulo-container col-8 d-flex justify-content-start mt-3">
         <h1>Pedido nº {{ pedido.numero }} - {{ pedido.cliente.nome }}</h1>
     </div>
         <br>
@@ -90,7 +90,7 @@
             {% csrf_token %}
             <div class="form-group">
                 <input type="text" name="pk" value="{{ pedido.pk }}" hidden>
-                <button id="finalizar-pedido" class="btn btn-primary" type="submit">Finalizar</button>
+                <button id="finalizar-pedido" class="btn btn-primary" type="submit">Finalizar pedido</button>
             </div>
         </form>
     </div>

@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 from core.views import (
     PedidoDetailView, PedidoUpdateView, delete_item_pedido,
-    lancar_desconto, HomeView, NovoPedidoFormView, finalizar_pedido
+    lancar_desconto, HomeView, NovoPedidoFormView, finalizar_pedido,
+    ProdutosListView,
 )
 
 urlpatterns = [
@@ -29,4 +30,5 @@ urlpatterns = [
     path('pedido/lancar-desconto/', lancar_desconto, name='lancar-desconto'),
     path('pedido/finalizar/', finalizar_pedido, name='finalizar-pedido'),
     path('pedido/<int:pk>/', PedidoDetailView.as_view(), name='pedido'),
+    path('produtos', ProdutosListView.as_view(), name='listagem-produtos'),
 ]
