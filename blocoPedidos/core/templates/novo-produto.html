@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if form.non_field_errors %}
+    <div class="alert alert-error">
+    <ul>
+        {% for error in form.non_field_errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+    </div>
+{% endif %}
+
+<div class="container col-8 d-flex justify-content-start p-2">
+    <form method="POST" {% if form.instance.id %}action="{% url 'editar-produto' form.instance.id %}" {% else %}action="{% url 'novo-produto' %}" {% endif %}class="form-inline">
+        {% csrf_token %}
+        <div class="input-group-prepend col-1 p-0 mb-0">
+            <div class="input-group-prepend">
+                <div class="input-group-text"> Nome do produto: </div>
+            </div>
+            <input id="id_{{ form.nome.name }}" type="text" class="form-control" name="{{ form.nome.name }}" {% if form.instance.id %}value="{{form.nome.value}}"{% endif %}>
+            <small>{{ form.nome.errors }}</small>
+            <div class="input-group-prepend ml-2">
+                <div class="input-group-text"> Preço: </div>
+            </div>
+            <input id="id_{{ form.preco.name }}" type="text" class="form-control" name="{{ form.preco.name }}" {% if form.instance.id %}value="{{form.preco.value}}"{% endif %}>
+            <small>{{ form.preco.errors }}</small>
+            <button type="submit" class="btn btn-success ml-2">Cadastrar</button>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/mask/masks.js' %}"></script>
+{% endblock %}

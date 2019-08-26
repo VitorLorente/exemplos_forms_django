@@ -1,15 +1,15 @@
 from decimal import Decimal
 
 from django.shortcuts import render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import UpdateView, FormView
+from django.views.generic.edit import UpdateView, FormView, CreateView, DeleteView
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.http import HttpResponseRedirect
 
 from core.models import Pedido, PedidoProduto, Produto
-from core.forms import PedidoForm, PedidoFormSet,NovoPedidoForm
+from core.forms import PedidoForm, PedidoFormSet,NovoPedidoForm, ProdutoForm
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -80,13 +80,12 @@ class PedidoUpdateView(UpdateView):
                                 active_page='itens-pedidos'))
 
     def get_success_url(self):
-        import pdb; pdb.set_trace()
         return reverse("novo-pedido",  kwargs={'pk': self.get_object().pk})
 
 
 class ProdutosListView(ListView):
     model = Produto
-    paginate_by = 3
+    paginate_by = 5
     context_object_name = 'lista_produtos'
     template_name = 'listagem-produtos.html'
 
@@ -94,7 +93,45 @@ class ProdutosListView(ListView):
         kwargs['active_page'] = 'listagem-produtos'
         return super().get_context_data(**kwargs)
 
+    def get_queryset(self):
+        return Produto.objects.all().order_by("-pk")
 
+
+class ProdutoUpdateView(UpdateView):
+    model = Produto
+    template_name = 'novo-produto.html'
+    fields = ["nome", "preco"]
+
+    def get_success_url(self):
+        return reverse('listagem-produtos')
+
+    def post(self, request, **kwargs):
+        request.POST = request.POST.copy()
+        request.POST['preco'] = Decimal(request.POST['preco'].replace(',', '.'))
+        return super().post(self, request, **kwargs)
+
+
+def novo_produto(request):
+    if request.POST:
+        data = request.POST.copy()
+        data['preco'] = Decimal(data['preco'].replace(',', '.'))
+        form = ProdutoForm(data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('listagem-produtos'))
+        else:
+            context = {'form': form}
+
+    else:
+        form = ProdutoForm()
+        context = {'form': form}
+
+    return render(request, 'novo-produto.html', context)
+
+
+class ProdutoDeleteView(DeleteView):
+    model = Produto
+    success_url = reverse_lazy('listagem-produtos')
 
 def delete_item_pedido(request):
     if request.POST:

@@ -2,6 +2,20 @@ body, html {
     background-color: whitesmoke;
 }
 
+a { 
+    color: inherit;
+    text-decoration: inherit;
+}
+
+a:hover { 
+    color: inherit;
+    text-decoration: inherit;
+}
+
+nav {
+    background-color: #e3f2fd;
+}
+
 textarea:focus,
 input[type="text"]:focus,
 input[type="password"]:focus,
@@ -72,4 +86,25 @@ button:focus,
 
 .edit-produto {
     color: rgb(55, 158, 243);
+}
+
+.container-confirm-delete {
+    border-radius: 3px;
+    background-color: #e3f2fd;
+}
+
+.btn-pagination {
+    border: 1px solid #cadfee;
+    background-color: #e3f2fd;
+    border-radius: 2px;
+}
+
+.btn-pagination:hover {
+    border: 1px solid #a3c6df;
+    background-color: #c0e1f8;
+}
+
+.link-lista-pedidos {
+    text-decoration: underline;
+    color: blue;
 }

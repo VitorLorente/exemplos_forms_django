@@ -12,7 +12,7 @@
             <ul>
                 {% for pedido in pedidos_abertos %}
                 <li>
-                    <a href="{% url 'novo-pedido' pedido.pk %}">{{pedido}}</a><br>
+                    <a href="{% url 'novo-pedido' pedido.pk %}" class="link-lista-pedidos">{{pedido}}</a><br>
                 </li>
                 {% endfor %}
             </ul>
@@ -24,7 +24,7 @@
             <ul>
                 {% for pedido in pedidos_finalizados %}
                 <li>
-                    <a href="{% url 'pedido' pedido.pk %}">{{pedido}}</a><br>
+                    <a href="{% url 'pedido' pedido.pk %}" class="link-lista-pedidos">{{pedido}}</a><br>
                 </li>
                 {% endfor %}
             </ul>

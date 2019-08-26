@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django import forms
 from .models import Pedido, PedidoProduto, Produto, Cliente
 from django.forms.models import inlineformset_factory
@@ -30,6 +32,17 @@ class NovoPedidoForm(forms.Form):
         if commit:
             pedido.save()
         return pedido
+
+class ProdutoForm(forms.ModelForm):
+    class Meta:
+        model = Produto
+        fields = ['nome', 'preco']
+
+    def clean(self):
+        nome = self.cleaned_data['nome']
+        preco = self.cleaned_data['preco']
+        return {'nome': nome, 'preco': preco}
+
 
 # class PedidoFormSet(BasePedidoFormSet):
 #     def __init__(self, *args, **kwargs):
